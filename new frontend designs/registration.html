@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MediKiosk - Step 1: Language &amp; Registration</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&amp;family=Quicksand:wght@600;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#3b6934",
+                        "secondary-container": "#d9e6da",
+                        "surface-bright": "#fbf9f8",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#50513f",
+                        "primary-container": "#2d5a27",
+                        "tertiary-fixed-dim": "#c8c8b0",
+                        "surface-container-high": "#eae8e7",
+                        "on-primary-container": "#9dd090",
+                        "secondary-fixed": "#d9e6da",
+                        "outline-variant": "#c2c9bb",
+                        "on-primary-fixed": "#002201",
+                        "surface-dim": "#dbd9d9",
+                        "inverse-on-surface": "#f2f0f0",
+                        "surface-container": "#efeded",
+                        "primary": "#154212",
+                        "background": "#fbf9f8",
+                        "on-secondary-fixed": "#131e17",
+                        "primary-fixed-dim": "#a1d494",
+                        "inverse-surface": "#303030",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#bdcabe",
+                        "on-surface": "#1b1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#bcf0ae",
+                        "outline": "#72796e",
+                        "on-surface-variant": "#42493e",
+                        "on-tertiary-fixed": "#1b1d0e",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e4e2e2",
+                        "secondary": "#556158",
+                        "inverse-primary": "#a1d494",
+                        "on-tertiary-fixed-variant": "#474836",
+                        "surface-container-low": "#f5f3f3",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-secondary-container": "#5b675e",
+                        "error-container": "#ffdad6",
+                        "surface": "#fbf9f8",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#c3c4ac",
+                        "tertiary-fixed": "#e4e4cc",
+                        "on-secondary-fixed-variant": "#3e4a41",
+                        "on-background": "#1b1c1c",
+                        "tertiary": "#393a29"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "unit-6": "3rem",
+                        "container-margin": "24px",
+                        "gutter": "16px",
+                        "unit-2": "1rem",
+                        "unit-4": "2rem",
+                        "unit-3": "1.5rem",
+                        "unit-1": "0.5rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": [
+                            "Public Sans"
+                        ],
+                        "display-lg": [
+                            "Quicksand"
+                        ],
+                        "label-sm": [
+                            "Public Sans"
+                        ],
+                        "headline-md": [
+                            "Quicksand"
+                        ],
+                        "display-lg-mobile": [
+                            "Quicksand"
+                        ],
+                        "body-md": [
+                            "Public Sans"
+                        ]
+                    },
+                    "fontSize": {
+                        "body-lg": [
+                            "18px",
+                            {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "display-lg": [
+                            "40px",
+                            {
+                                "lineHeight": "48px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "label-sm": [
+                            "14px",
+                            {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "display-lg-mobile": [
+                            "32px",
+                            {
+                                "lineHeight": "40px",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "body-md": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Neumorphic Shadows for Tactile Feel */
+        .neumorphic-raised {
+            box-shadow: 8px 8px 16px #dbd9d9, -8px -8px 16px #ffffff;
+        }
+
+        .neumorphic-pressed {
+            box-shadow: inset 8px 8px 16px #dbd9d9, inset -8px -8px 16px #ffffff;
+        }
+
+        /* Smooth transitions for interactive elements */
+        .interactive-element {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .interactive-element:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-surface-bright text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+    <!-- TopAppBar (From Shared Components) -->
+    <header
+        class="w-full top-0 sticky bg-surface-bright shadow-[8px_8px_16px_#dbd9d9,-8px_-8px_16px_#ffffff] shadow-sm z-50">
+        <div class="flex items-center justify-between px-container-margin h-20">
+            <div class="flex items-center gap-unit-2">
+                <span class="material-symbols-outlined text-primary text-[32px]"
+                    style="font-variation-settings: 'FILL' 1;">healing</span>
+                <span class="font-display-lg-mobile text-display-lg-mobile text-primary">MediKiosk</span>
+            </div>
+            <div class="flex items-center">
+                <button
+                    class="font-headline-md text-headline-md text-primary font-bold hover:bg-secondary-container transition-colors px-unit-3 py-unit-1 rounded-full interactive-element active:scale-95 duration-200">
+                    English
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Main Canvas -->
+    <main
+        class="flex-grow flex flex-col items-center px-container-margin py-unit-6 w-full max-w-5xl mx-auto gap-unit-6">
+        <!-- Progress Indicator -->
+        <section class="w-full max-w-2xl text-center flex flex-col gap-unit-2">
+            <h2 class="font-headline-md text-headline-md-mobile text-on-surface-variant">Step 1 of 5</h2>
+            <div class="w-full h-4 bg-surface-variant rounded-full overflow-hidden neumorphic-pressed">
+                <div
+                    class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full w-1/5 shadow-[inset_0px_2px_4px_rgba(255,255,255,0.3)]">
+                </div>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-unit-1">Language &amp; Registration</p>
+        </section>
+        <!-- Main Content Area: Bento Grid Layout -->
+        <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-gutter">
+            <!-- Language Selection (Left Column on Desktop) -->
+            <section
+                class="md:col-span-5 bg-surface-container-low rounded-xl p-unit-4 flex flex-col gap-unit-4 neumorphic-raised">
+                <h3 class="font-headline-md text-headline-md text-on-surface border-b border-surface-variant pb-unit-2">
+                    Select Language</h3>
+                <div class="flex flex-col gap-unit-3">
+                    <!-- English (Selected) -->
+                    <button
+                        class="w-full text-left px-unit-4 py-unit-3 rounded-lg bg-primary-container text-on-primary-container font-headline-md text-headline-md flex justify-between items-center neumorphic-pressed interactive-element">
+                        <span>English</span>
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    </button>
+                    <!-- Hindi -->
+                    <button
+                        class="w-full text-left px-unit-4 py-unit-3 rounded-lg bg-surface-bright text-on-surface font-headline-md text-headline-md hover:bg-secondary-container transition-colors neumorphic-raised interactive-element">
+                        <span>हिंदी (Hindi)</span>
+                    </button>
+                    <!-- Gujarati -->
+                    <button
+                        class="w-full text-left px-unit-4 py-unit-3 rounded-lg bg-surface-bright text-on-surface font-headline-md text-headline-md hover:bg-secondary-container transition-colors neumorphic-raised interactive-element">
+                        <span>ગુજરાતી (Gujarati)</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Registration Form (Right Column on Desktop) -->
+            <section
+                class="md:col-span-7 bg-surface-container-low rounded-xl p-unit-4 flex flex-col gap-unit-4 neumorphic-raised">
+                <h3 class="font-headline-md text-headline-md text-on-surface border-b border-surface-variant pb-unit-2">
+                    Patient Details</h3>
+                <form class="flex flex-col gap-unit-4">
+                    <!-- Full Name -->
+                    <div class="flex flex-col gap-unit-1">
+                        <label class="font-label-sm text-label-sm text-on-surface-variant px-unit-1" for="fullName">Full
+                            Name</label>
+                        <input
+                            class="w-full bg-surface-bright border-none rounded-lg px-unit-4 py-unit-3 font-body-lg text-body-lg text-on-surface focus:ring-2 focus:ring-primary focus:outline-none neumorphic-pressed placeholder:text-outline-variant"
+                            id="fullName" placeholder="Enter full name" type="text" />
+                    </div>
+                    <!-- Age -->
+                    <div class="flex flex-col gap-unit-1">
+                        <label class="font-label-sm text-label-sm text-on-surface-variant px-unit-1"
+                            for="age">Age</label>
+                        <input
+                            class="w-full md:w-1/3 bg-surface-bright border-none rounded-lg px-unit-4 py-unit-3 font-body-lg text-body-lg text-on-surface focus:ring-2 focus:ring-primary focus:outline-none neumorphic-pressed placeholder:text-outline-variant"
+                            id="age" placeholder="e.g., 34" type="number" />
+                    </div>
+                    <!-- Mock ABHA ID -->
+                    <div class="flex flex-col gap-unit-1 mt-unit-2">
+                        <label class="font-label-sm text-label-sm text-primary px-unit-1 flex items-center gap-unit-1"
+                            for="abhaId">
+                            <span class="material-symbols-outlined text-[16px]">id_card</span> Auto-filled ABHA ID
+                        </label>
+                        <input
+                            class="w-full bg-surface-container-high border-none rounded-lg px-unit-4 py-unit-3 font-body-lg text-body-lg text-on-surface-variant opacity-80 cursor-not-allowed select-none neumorphic-pressed"
+                            id="abhaId" readonly="" type="text" value="91-2234-5567-8901" />
+                    </div>
+                    <!-- Consent Checkbox -->
+                    <div
+                        class="flex items-start gap-unit-2 mt-unit-4 p-unit-3 bg-secondary-container rounded-lg bg-opacity-30">
+                        <div class="flex items-center h-6">
+                            <input checked=""
+                                class="w-6 h-6 text-primary bg-surface-bright border-none rounded focus:ring-primary focus:ring-2 neumorphic-pressed"
+                                id="consent" type="checkbox" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="font-body-md text-body-md text-on-surface font-semibold cursor-pointer"
+                                for="consent">
+                                ABHA Data Consent
+                            </label>
+                            <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">I agree to link my
+                                health records using my ABHA ID for this visit.</p>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <!-- Call to Action (Next Button) -->
+        <div class="w-full flex justify-end mt-unit-4 pb-unit-6">
+            <button
+                class="bg-primary text-on-primary font-headline-md text-headline-md px-unit-6 py-unit-4 rounded-xl flex items-center justify-center gap-unit-2 min-w-[200px] min-h-[64px] neumorphic-raised interactive-element hover:bg-surface-tint">
+                <span>Next Step</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+        </div>
+    </main>
+    <!-- Footer (From Shared Components) -->
+    <footer class="w-full mt-auto bg-surface-container-low border-t border-outline-variant">
+        <div class="flex flex-col md:flex-row justify-between items-center px-container-margin py-unit-4 gap-unit-2">
+            <span class="font-body-md text-body-md text-on-surface-variant">© 2024 MediKiosk Health. Humanist Healing
+                Systems.</span>
+            <div class="flex gap-unit-4">
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-opacity duration-300"
+                    href="#">Privacy Policy</a>
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-opacity duration-300"
+                    href="#">Terms of Service</a>
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-opacity duration-300"
+                    href="#">Hackathon Info</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

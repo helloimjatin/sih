@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Doctor Console</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#556158",
+                        "primary-fixed-dim": "#a1d494",
+                        "surface-container-high": "#eae8e7",
+                        "on-tertiary-fixed": "#1b1d0e",
+                        "outline-variant": "#c2c9bb",
+                        "on-tertiary-fixed-variant": "#474836",
+                        "on-secondary-fixed-variant": "#3e4a41",
+                        "inverse-surface": "#303030",
+                        "tertiary-container": "#50513f",
+                        "background": "#fbf9f8",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#d9e6da",
+                        "surface": "#fbf9f8",
+                        "primary": "#154212",
+                        "inverse-on-surface": "#f2f0f0",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#c3c4ac",
+                        "on-primary-fixed-variant": "#23501e",
+                        "tertiary-fixed": "#e4e4cc",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#002201",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-secondary-fixed": "#131e17",
+                        "primary-container": "#2d5a27",
+                        "on-surface-variant": "#42493e",
+                        "surface-container": "#efeded",
+                        "tertiary-fixed-dim": "#c8c8b0",
+                        "surface-bright": "#fbf9f8",
+                        "surface-variant": "#e4e2e2",
+                        "on-background": "#1b1c1c",
+                        "on-secondary-container": "#5b675e",
+                        "on-surface": "#1b1c1c",
+                        "surface-tint": "#3b6934",
+                        "tertiary": "#393a29",
+                        "primary-fixed": "#bcf0ae",
+                        "secondary-fixed": "#d9e6da",
+                        "on-primary-container": "#9dd090",
+                        "secondary-fixed-dim": "#bdcabe",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#dbd9d9",
+                        "surface-container-low": "#f5f3f3",
+                        "outline": "#72796e",
+                        "inverse-primary": "#a1d494"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-3": "1.5rem",
+                        "container-margin": "24px",
+                        "unit-2": "1rem",
+                        "gutter": "16px",
+                        "unit-1": "0.5rem",
+                        "unit-6": "3rem",
+                        "unit-4": "2rem",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "headline-md": ["Quicksand"],
+                        "display-lg": ["Quicksand"],
+                        "display-lg-mobile": ["Quicksand"],
+                        "label-sm": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "label-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neo-shadow {
+            box-shadow: 4px 4px 16px rgba(85, 97, 88, 0.1), -4px -4px 16px rgba(255, 255, 255, 0.8);
+        }
+
+        .neo-inner-shadow {
+            box-shadow: inset 4px 4px 8px rgba(85, 97, 88, 0.05), inset -4px -4px 8px rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md antialiased h-screen flex overflow-hidden">
+    <!-- Navigation Drawer (Desktop) -->
+    <aside
+        class="hidden md:flex flex-col bg-surface h-full w-72 rounded-r-lg shadow-[8px_0_24px_rgba(85,97,88,0.08)] fixed left-0 top-0 z-40 p-unit-3">
+        <div class="mb-unit-6 pt-unit-2">
+            <h2 class="font-display-lg-mobile text-display-lg-mobile text-primary font-bold">MediKiosk Pro</h2>
+        </div>
+        <nav class="flex flex-col gap-unit-2 font-body-lg text-body-lg">
+            <a class="flex items-center gap-unit-2 text-on-surface-variant px-unit-2 py-unit-1 hover:bg-secondary-container transition-all active:translate-x-1 duration-150 rounded-DEFAULT"
+                href="#">
+                <span class="material-symbols-outlined">group</span>
+                Patient List
+            </a>
+            <!-- Active State -->
+            <a class="flex items-center gap-unit-2 bg-primary-container text-on-primary-container rounded-DEFAULT px-unit-2 py-unit-1 shadow-inner hover:bg-secondary-container transition-all active:translate-x-1 duration-150 font-bold"
+                href="#">
+                <span class="material-symbols-outlined"
+                    style="font-variation-settings: 'FILL' 1;">medical_services</span>
+                Active Consultations
+            </a>
+            <a class="flex items-center gap-unit-2 text-on-surface-variant px-unit-2 py-unit-1 hover:bg-secondary-container transition-all active:translate-x-1 duration-150 rounded-DEFAULT"
+                href="#">
+                <span class="material-symbols-outlined">history</span>
+                Medical History
+            </a>
+        </nav>
+    </aside>
+    <!-- Main Content Wrapper -->
+    <main class="flex-1 flex flex-col h-full md:ml-72 relative w-full">
+        <!-- TopAppBar -->
+        <header
+            class="bg-background w-full top-0 shadow-[4px_4px_16px_rgba(85,97,88,0.1),-4px_-4px_16px_rgba(255,255,255,0.8)] z-30 flex items-center justify-between px-container-margin py-unit-2 sticky">
+            <div class="flex items-center gap-unit-3">
+                <span class="material-symbols-outlined text-primary md:hidden"
+                    style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+                <h1 class="font-headline-md text-headline-md font-bold text-primary">Doctor Console</h1>
+            </div>
+            <div class="flex items-center gap-unit-3">
+                <button
+                    class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center hover:bg-secondary-container/50 transition-colors active:scale-95 duration-200"
+                    title="Doctor Profile">
+                    <span class="material-symbols-outlined">person</span>
+                </button>
+            </div>
+        </header>
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-gutter md:p-container-margin pb-24 md:pb-8 flex flex-col gap-unit-6">
+            <!-- Daily Statistics Section -->
+            <section>
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-unit-3 pl-unit-1">Daily Statistics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                    <!-- Stat Card 1 -->
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-unit-4 neo-shadow flex items-center gap-unit-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[28px]">groups</span>
+                        </div>
+                        <div>
+                            <p class="text-on-surface-variant font-body-md">Patients Seen</p>
+                            <p class="font-display-lg-mobile text-display-lg-mobile text-primary">24</p>
+                        </div>
+                    </div>
+                    <!-- Stat Card 2 -->
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-unit-4 neo-shadow flex items-center gap-unit-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[28px]">schedule</span>
+                        </div>
+                        <div>
+                            <p class="text-on-surface-variant font-body-md">Avg. Wait Time</p>
+                            <p class="font-display-lg-mobile text-display-lg-mobile text-primary">12 <span
+                                    class="text-lg font-normal text-on-surface-variant">min</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Active Consultations Section -->
+            <section class="flex-1">
+                <div class="flex justify-between items-end mb-unit-3 pl-unit-1 pr-unit-1">
+                    <h2 class="font-headline-md text-headline-md text-on-surface">Active Queue</h2>
+                    <span class="text-primary font-label-sm bg-primary-container/30 px-3 py-1 rounded-full">4
+                        Waiting</span>
+                </div>
+                <div class="flex flex-col gap-gutter">
+                    <!-- Patient Card 1 (Urgent) -->
+                    <div
+                        class="bg-surface-container-lowest rounded-DEFAULT p-unit-3 neo-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-unit-3 hover:neo-inner-shadow transition-shadow cursor-pointer">
+                        <div class="flex items-start sm:items-center gap-unit-3">
+                            <img class="w-12 h-12 rounded-full object-cover shadow-sm"
+                                data-alt="A clean, minimalist avatar graphic for a patient named Rahul Sharma in soft sage green tones."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOmMYG2rcP4IsT7ZWkSyjhdgCT8VNvo10iC0Pt-mdxZP1xiLKWENG6IU_1oWoDMXZSuZaFULVpqVnl57X-1dgQQr8OlmbR7qUjdEVJYytbe7UBpAQMKJ6Zv0T7xIVvn6tzDxTk7H7PO3NRryqGOPIV3K7DhGyPOhf5jfElCqqgi7RpWbP1DQnUV_XHqnHEi46_3YMPjZY6oDVoq5dxex7QEB5XinHyaxz688O3msB5bP2imfdVP6Yu0A" />
+                            <div>
+                                <h3 class="font-headline-md text-[18px] text-on-surface leading-snug">Rahul Sharma</h3>
+                                <p class="text-on-surface-variant font-body-md text-sm flex items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-[16px]">stethoscope</span>
+                                    Chest Pain
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-unit-3 w-full sm:w-auto">
+                            <span
+                                class="bg-error-container text-on-error-container font-label-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                                <span class="material-symbols-outlined text-[16px]"
+                                    style="font-variation-settings: 'FILL' 1;">error</span>
+                                Urgent
+                            </span>
+                            <button
+                                class="bg-primary text-on-primary rounded-full px-4 py-2 font-label-sm hover:opacity-90 transition-opacity neo-shadow active:scale-95">
+                                Review
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Patient Card 2 (Stable) -->
+                    <div
+                        class="bg-surface-container-lowest rounded-DEFAULT p-unit-3 neo-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-unit-3 hover:neo-inner-shadow transition-shadow cursor-pointer">
+                        <div class="flex items-start sm:items-center gap-unit-3">
+                            <img class="w-12 h-12 rounded-full object-cover shadow-sm"
+                                data-alt="A clean, minimalist avatar graphic for a patient named Anita Desai in soft sage green tones."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuApVld2Ees0WFIX8vyD62PXO0Qv3VaF5POdqLzfsjZG9aNaSrWfwgV4RX9yufEyrl36EUlPiqtCkCZykbQzrGpxLaqR6OIXRAsiAFVxRr5P2Uz-ewu6-VdIx1sG3tWUMctGxRBFokwxmOxvVfBoq4FJYDD-xKHOFbYInHV8KPLn9kBkeHPXwTX9fGVijbvrAnDgWKoIS4otezxrlWCPlyc5ufTeVPej1-4ySW-SybHB2tKCtiaJaDdPdg" />
+                            <div>
+                                <h3 class="font-headline-md text-[18px] text-on-surface leading-snug">Anita Desai</h3>
+                                <p class="text-on-surface-variant font-body-md text-sm flex items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-[16px]">stethoscope</span>
+                                    Routine Follow-up
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-unit-3 w-full sm:w-auto">
+                            <span
+                                class="bg-secondary-container text-on-secondary-container font-label-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                                <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                Stable
+                            </span>
+                            <button
+                                class="bg-primary text-on-primary rounded-full px-4 py-2 font-label-sm hover:opacity-90 transition-opacity neo-shadow active:scale-95">
+                                Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- BottomNavBar (Mobile) -->
+    <nav
+        class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-unit-1 bg-surface-container-low shadow-[0_-4px_24px_rgba(85,97,88,0.1)] rounded-t-lg">
+        <a class="flex flex-col items-center justify-center text-on-surface-variant px-unit-3 py-unit-1 hover:opacity-80 transition-opacity active:scale-90 duration-200"
+            href="#">
+            <span class="material-symbols-outlined">group</span>
+            <span class="font-label-sm text-label-sm mt-1">Patients</span>
+        </a>
+        <!-- Active State -->
+        <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-unit-3 py-unit-1 hover:opacity-80 transition-opacity active:scale-90 duration-200"
+            href="#">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+            <span class="font-label-sm text-label-sm mt-1 font-bold">Active</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant px-unit-3 py-unit-1 hover:opacity-80 transition-opacity active:scale-90 duration-200"
+            href="#">
+            <span class="material-symbols-outlined">history</span>
+            <span class="font-label-sm text-label-sm mt-1">History</span>
+        </a>
+    </nav>
+</body>
+
+</html>

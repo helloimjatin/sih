@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MediKiosk - OPD Token &amp; Summary</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&amp;family=Quicksand:wght@600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#a1d494",
+                        "background": "#fbf9f8",
+                        "surface-bright": "#fbf9f8",
+                        "tertiary-fixed-dim": "#c8c8b0",
+                        "tertiary": "#393a29",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#a1d494",
+                        "surface-tint": "#3b6934",
+                        "tertiary-fixed": "#e4e4cc",
+                        "surface-container-low": "#f5f3f3",
+                        "secondary-container": "#d9e6da",
+                        "surface-container-high": "#eae8e7",
+                        "inverse-surface": "#303030",
+                        "surface-variant": "#e4e2e2",
+                        "primary-fixed": "#bcf0ae",
+                        "on-surface": "#1b1c1c",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-background": "#1b1c1c",
+                        "primary-container": "#2d5a27",
+                        "surface": "#fbf9f8",
+                        "on-secondary-fixed-variant": "#3e4a41",
+                        "surface-container": "#efeded",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f2f0f0",
+                        "on-tertiary-fixed": "#1b1d0e",
+                        "on-primary-container": "#9dd090",
+                        "outline": "#72796e",
+                        "secondary-fixed-dim": "#bdcabe",
+                        "on-secondary-container": "#5b675e",
+                        "on-tertiary-fixed-variant": "#474836",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-tertiary-container": "#c3c4ac",
+                        "tertiary-container": "#50513f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#131e17",
+                        "outline-variant": "#c2c9bb",
+                        "surface-container-highest": "#e4e2e2",
+                        "primary": "#154212",
+                        "on-primary-fixed": "#002201",
+                        "secondary-fixed": "#d9e6da",
+                        "on-error-container": "#93000a",
+                        "secondary": "#556158",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#42493e",
+                        "surface-dim": "#dbd9d9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-1": "0.5rem",
+                        "unit-3": "1.5rem",
+                        "container-margin": "24px",
+                        "gutter": "16px",
+                        "unit-2": "1rem",
+                        "unit-4": "2rem",
+                        "unit-6": "3rem",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Public Sans"],
+                        "display-lg": ["Quicksand"],
+                        "label-sm": ["Public Sans"],
+                        "headline-md": ["Quicksand"],
+                        "body-lg": ["Public Sans"],
+                        "display-lg-mobile": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neomorphic-soft-lift {
+            box-shadow: 8px 8px 16px #eae8e7, -8px -8px 16px #ffffff;
+        }
+
+        .neomorphic-sunken-surface {
+            box-shadow: inset 4px 4px 8px #eae8e7, inset -4px -4px 8px #ffffff;
+        }
+
+        .neomorphic-ambient {
+            box-shadow: 0px 8px 24px rgba(133, 145, 131, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- TopAppBar -->
+    <header
+        class="flex items-center justify-between w-full sticky top-0 z-50 bg-background text-primary px-container-margin py-unit-3 bg-surface-container-low shadow-[8px_8px_16px_#eae8e7,-8px_-8px_16px_#ffffff]">
+        <div class="flex items-center gap-unit-2">
+            <span class="material-symbols-outlined text-3xl">healing</span>
+            <span class="font-display-lg-mobile text-display-lg-mobile tracking-tight">MediKiosk</span>
+        </div>
+        <nav class="hidden md:flex gap-unit-4 font-label-sm text-label-sm">
+            <a class="text-on-surface-variant hover:opacity-80 transition-opacity" href="#">Home</a>
+            <a class="text-on-surface-variant hover:opacity-80 transition-opacity" href="#">Appointments</a>
+            <a class="text-on-surface-variant hover:opacity-80 transition-opacity" href="#">Services</a>
+            <a class="text-primary hover:opacity-80 transition-opacity" href="#">Token</a>
+        </nav>
+    </header>
+    <main class="flex-grow w-full max-w-7xl mx-auto px-container-margin py-unit-6 flex flex-col items-center">
+        <!-- Progress Indicator -->
+        <div class="w-full max-w-3xl mb-unit-6">
+            <div class="flex justify-between items-center mb-unit-2 font-label-sm text-label-sm text-secondary">
+                <span>Step 5 of 5: Completion &amp; Summary</span>
+                <span>100%</span>
+            </div>
+            <div class="w-full h-4 bg-surface-container-high rounded-full overflow-hidden neomorphic-sunken-surface">
+                <div class="h-full bg-gradient-to-r from-primary-fixed-dim to-primary rounded-full w-full"></div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-unit-6 w-full max-w-5xl">
+            <!-- Left Column: OPD Token -->
+            <div class="flex flex-col items-center">
+                <div
+                    class="bg-surface-bright rounded-xl p-unit-6 flex flex-col items-center w-full max-w-md neomorphic-soft-lift relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-4 bg-primary"></div>
+                    <h2 class="font-headline-md text-headline-md text-on-surface mt-unit-2 mb-unit-4">Digital OPD Token
+                    </h2>
+                    <div
+                        class="bg-surface-container-low rounded-lg p-unit-4 w-full flex flex-col items-center neomorphic-sunken-surface mb-unit-6">
+                        <span class="font-label-sm text-label-sm text-secondary mb-unit-1">Token Number</span>
+                        <span class="font-display-lg text-display-lg text-primary tracking-tight">A-124</span>
+                    </div>
+                    <div class="w-full flex justify-between items-center mb-unit-6">
+                        <div>
+                            <span class="block font-label-sm text-label-sm text-secondary">Patient Name</span>
+                            <span class="block font-body-lg text-body-lg text-on-surface font-semibold">Rahul
+                                Sharma</span>
+                        </div>
+                        <div
+                            class="w-24 h-24 bg-surface rounded-lg neomorphic-sunken-surface flex items-center justify-center p-2">
+                            <!-- QR Code Placeholder -->
+                            <img alt="QR Code" class="w-full h-full object-cover rounded opacity-80"
+                                data-alt="A clean, minimalist QR code on a stark white background. The QR code features perfectly sharp black squares arranged in the standard pattern, conveying a sense of secure digital transaction in a modern healthcare setting. The lighting is uniform and bright."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6sSMVmq3T9oOSSP9lumaPKkmsTi1HtcbR_FCtkoyvu_6hr_zWgEk43r5PWUmUGqW6kqw2blhLAGT27ocGfYbDq_O0TcmM7H_1awEPkO91cc9M4pVWo8NRI5M5Ln2DkR_cqknojdulJQ8vuxKMkyyxPWFfNQufkKrtPXU2aZ5u-iXLI6GuSGqOiGRhKt07mrDzKuMQ6z3fJxq0BW_ZEwbGw4i0nVTjTPnmwMo-PbOKto54w_9_-SSxgA" />
+                        </div>
+                    </div>
+                    <div class="w-full border-t border-dashed border-outline-variant pt-unit-4">
+                        <div class="flex items-center gap-unit-2 mb-unit-2">
+                            <span class="material-symbols-outlined text-secondary">stethoscope</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Assigned Doctor</span>
+                                <span class="block font-body-md text-body-md text-on-surface">Dr. Aditi Verma</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-unit-2 mb-unit-2">
+                            <span class="material-symbols-outlined text-secondary">domain</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Department</span>
+                                <span class="block font-body-md text-body-md text-on-surface">Cardiology</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-unit-2">
+                            <span class="material-symbols-outlined text-secondary">schedule</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Estimated Wait
+                                    Time</span>
+                                <span class="block font-body-md text-body-md text-primary font-semibold">15 - 20
+                                    mins</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column: Summary & Actions -->
+            <div class="flex flex-col justify-between h-full">
+                <div class="bg-surface-bright rounded-xl p-unit-6 w-full neomorphic-ambient">
+                    <h3 class="font-headline-md text-headline-md text-on-surface mb-unit-4">Check-in Summary</h3>
+                    <ul class="space-y-unit-3">
+                        <li
+                            class="flex items-start gap-unit-3 p-unit-3 rounded-lg bg-surface-container-low neomorphic-sunken-surface">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Registration</span>
+                                <span class="block font-body-md text-body-md text-on-surface">Completed</span>
+                            </div>
+                        </li>
+                        <li
+                            class="flex items-start gap-unit-3 p-unit-3 rounded-lg bg-surface-container-low neomorphic-sunken-surface">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Chief Complaint</span>
+                                <span class="block font-body-md text-body-md text-on-surface">Chest Pain</span>
+                            </div>
+                        </li>
+                        <li
+                            class="flex items-start gap-unit-3 p-unit-3 rounded-lg bg-surface-container-low neomorphic-sunken-surface">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Questionnaire</span>
+                                <span class="block font-body-md text-body-md text-on-surface">Completed</span>
+                            </div>
+                        </li>
+                        <li
+                            class="flex items-start gap-unit-3 p-unit-3 rounded-lg bg-surface-container-low neomorphic-sunken-surface">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <div>
+                                <span class="block font-label-sm text-label-sm text-secondary">Scans</span>
+                                <span class="block font-body-md text-body-md text-on-surface">1 Document Uploaded</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-unit-6 flex flex-col sm:flex-row gap-unit-4">
+                    <button
+                        class="flex-1 py-unit-3 px-unit-6 rounded-full bg-primary text-on-primary font-label-sm text-label-sm text-center neomorphic-soft-lift hover:opacity-90 active:scale-95 transition-all duration-200">
+                        Finish
+                    </button>
+                    <button
+                        class="flex-1 py-unit-3 px-unit-6 rounded-full border-2 border-primary text-primary font-label-sm text-label-sm text-center hover:bg-surface-container-low transition-all duration-200 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">print</span>
+                        Print Token
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="w-full mt-unit-6 bg-surface-container-low rounded-t-lg shadow-[inset_4px_4px_8px_#eae8e7,inset_-4px_-4px_8px_#ffffff] py-unit-4 px-container-margin flex flex-col md:flex-row justify-between items-center gap-gutter">
+        <div class="font-display-lg-mobile text-display-lg-mobile text-primary">
+            MediKiosk
+        </div>
+        <nav class="flex flex-wrap gap-4 font-label-sm text-label-sm">
+            <a class="text-secondary hover:text-primary transition-colors focus:ring-2 focus:ring-primary-fixed-dim"
+                href="#">Privacy Policy</a>
+            <a class="text-secondary hover:text-primary transition-colors focus:ring-2 focus:ring-primary-fixed-dim"
+                href="#">Terms of Service</a>
+            <a class="text-secondary hover:text-primary transition-colors focus:ring-2 focus:ring-primary-fixed-dim"
+                href="#">Accessibility</a>
+            <a class="text-secondary hover:text-primary transition-colors focus:ring-2 focus:ring-primary-fixed-dim"
+                href="#">Help Center</a>
+        </nav>
+        <div class="font-body-md text-body-md text-secondary">
+            © 2026 MediKiosk Humanist Healing. All rights reserved.
+        </div>
+    </footer>
+</body>
+
+</html>
