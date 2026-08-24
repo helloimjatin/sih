@@ -17,6 +17,7 @@ interface QueueItem {
   summary?: string
 }
 
+// Fixed ISO timestamps to avoid SSR vs Client hydration mismatch
 const DEFAULT_QUEUE: QueueItem[] = [
   {
     id: 101,
@@ -25,7 +26,7 @@ const DEFAULT_QUEUE: QueueItem[] = [
     status: 'waiting_doctor',
     priority_flag: true,
     token: 'A-124',
-    created_at: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
+    created_at: '2026-08-24T17:15:00.000Z',
     answers: [
       { field_key: 'onset', value: 'Today — sudden 2h ago', source: 'touch' },
       { field_key: 'severity', value: '8/10 Severe', source: 'touch' },
@@ -35,10 +36,14 @@ const DEFAULT_QUEUE: QueueItem[] = [
       { field_key: 'trigger', value: 'Worse after exertion', source: 'voice' },
     ],
     documents: [
-      { doc_type: 'prescription', file_name: 'prior_rx.jpg', entities: [
-        { entity_type: 'medicine', value: 'Tab. Aspirin 75mg QD', confidence_note: 'Verified' },
-        { entity_type: 'medicine', value: 'Tab. Sorbitrate 5mg SL', confidence_note: 'Verified' },
-      ]},
+      {
+        doc_type: 'prescription',
+        file_name: 'prior_rx.jpg',
+        entities: [
+          { entity_type: 'medicine', value: 'Tab. Aspirin 75mg QD', confidence_note: 'Verified' },
+          { entity_type: 'medicine', value: 'Tab. Sorbitrate 5mg SL', confidence_note: 'Verified' },
+        ],
+      },
     ],
     ayush_notes: 'Arjun Churna twice daily.',
     summary: 'Rahul Sharma, 54 y/o male, sudden severe chest pain (8/10) radiating to arm/jaw. Breathlessness + cold sweating. Exertional trigger. Prior rx: Aspirin + Sorbitrate.\n\n⚠ RED FLAG — Immediate evaluation required.',
@@ -50,7 +55,7 @@ const DEFAULT_QUEUE: QueueItem[] = [
     status: 'waiting_doctor',
     priority_flag: false,
     token: 'B-042',
-    created_at: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
+    created_at: '2026-08-24T17:05:00.000Z',
     answers: [
       { field_key: 'duration', value: '2–7 days', source: 'touch' },
       { field_key: 'type', value: 'Dry cough', source: 'touch' },
@@ -68,7 +73,7 @@ const DEFAULT_QUEUE: QueueItem[] = [
     status: 'waiting_doctor',
     priority_flag: false,
     token: 'B-045',
-    created_at: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
+    created_at: '2026-08-24T16:50:00.000Z',
     answers: [
       { field_key: 'onset', value: '1–4 weeks ago', source: 'touch' },
       { field_key: 'severity', value: '4/10 Mild', source: 'touch' },
@@ -81,14 +86,8 @@ const DEFAULT_QUEUE: QueueItem[] = [
   },
 ]
 
-function timeAgo(iso: string) {
-  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
-  if (diff < 60) return `${diff}s`
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
-  return `${Math.floor(diff / 3600)}h ago`
-}
-
 export default function DoctorConsole() {
+  const [isMounted, setIsMounted] = useState(false)
   const [queue, setQueue] = useState<QueueItem[]>(DEFAULT_QUEUE)
   const [selected, setSelected] = useState<QueueItem | null>(DEFAULT_QUEUE[0])
   const [editedSummary, setEditedSummary] = useState(DEFAULT_QUEUE[0].summary || '')
@@ -101,6 +100,19 @@ export default function DoctorConsole() {
     setToasts(p => [...p, { id, type, message: msg, onClose: id => setToasts(t => t.filter(x => x.id !== id)) }])
   }
 
+  // Hydration fix: mark mounted after initial client render
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Helper to update queue state AND sync to localStorage
+  const updateQueueState = (newQueue: QueueItem[]) => {
+    setQueue(newQueue)
+    try {
+      localStorage.setItem('medikiosk_queue', JSON.stringify(newQueue))
+    } catch {}
+  }
+
   useEffect(() => {
     const sync = () => {
       try {
@@ -108,11 +120,15 @@ export default function DoctorConsole() {
         if (!raw) return
         const parsed: QueueItem[] = JSON.parse(raw)
         const map = new Map<number, QueueItem>()
-        ;[...parsed, ...DEFAULT_QUEUE].forEach(q => map.set(q.id, q))
-        setQueue(Array.from(map.values()).sort((a, b) => {
+        // Merge localStorage data with DEFAULT_QUEUE
+        DEFAULT_QUEUE.forEach(q => map.set(q.id, q))
+        parsed.forEach(q => map.set(q.id, q))
+
+        const sorted = Array.from(map.values()).sort((a, b) => {
           if (a.priority_flag !== b.priority_flag) return a.priority_flag ? -1 : 1
           return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        }))
+        })
+        setQueue(sorted)
       } catch {}
     }
     sync()
@@ -121,25 +137,45 @@ export default function DoctorConsole() {
   }, [])
 
   const selectPatient = (item: QueueItem) => {
-    const updated = { ...item, status: 'consulting' }
-    setQueue(q => q.map(x => x.id === item.id ? updated : x))
+    const updated = { ...item, status: item.status === 'completed' ? 'completed' : 'consulting' }
+    const updatedQueue = queue.map(x => x.id === item.id ? updated : x)
+    updateQueueState(updatedQueue)
     setSelected(updated)
     setEditedSummary(updated.summary || '')
     setIsEditing(false)
     setShowDetail(true)
-    toast('success', `Consultation started: ${item.patient.name}`)
+    toast('success', `Reviewing patient: ${item.patient.name}`)
   }
 
   const saveSummary = () => {
     if (!selected) return
     const updated = { ...selected, summary: editedSummary }
     setSelected(updated)
-    setQueue(q => q.map(x => x.id === updated.id ? updated : x))
+    const updatedQueue = queue.map(x => x.id === updated.id ? updated : x)
+    updateQueueState(updatedQueue)
     setIsEditing(false)
     toast('success', 'Summary saved!')
   }
 
-  const urgentCount = queue.filter(q => q.priority_flag).length
+  const completeConsultation = () => {
+    if (!selected) return
+    const updated = { ...selected, status: 'completed' }
+    setSelected(updated)
+    const updatedQueue = queue.map(x => x.id === selected.id ? updated : x)
+    updateQueueState(updatedQueue)
+    toast('success', `Consultation completed for ${selected.patient.name}`)
+  }
+
+  const timeAgo = (iso: string) => {
+    if (!isMounted) return 'intake'
+    const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+    if (diff < 0) return 'just now'
+    if (diff < 60) return `${diff}s ago`
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
+    return `${Math.floor(diff / 3600)}h ago`
+  }
+
+  const urgentCount = queue.filter(q => q.priority_flag && q.status !== 'completed').length
   const waitingCount = queue.filter(q => q.status === 'waiting_doctor').length
   const activeCount = queue.filter(q => q.status === 'consulting').length
 
@@ -172,68 +208,70 @@ export default function DoctorConsole() {
       </div>
 
       {/* Scrollable Queue Cards */}
-      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
+      <div className="flex-1 overflow-y-auto p-3 pb-28 sm:pb-6 flex flex-col gap-3">
         {queue.map(item => {
           const isSelected = selected?.id === item.id
           const isActive = item.status === 'consulting'
+          const isCompleted = item.status === 'completed'
 
           return (
             <div
               key={item.id}
               onClick={() => selectPatient(item)}
-              className={`rounded-2xl border-2 p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col gap-3 ${
+              className={`rounded-2xl border-2 p-3.5 cursor-pointer transition-all relative flex items-center justify-between gap-3 ${
                 isSelected
-                  ? 'border-primary bg-surface-bright'
-                  : 'border-outline-variant/60 bg-surface-bright hover:border-primary/50'
-              }`}
+                  ? 'border-primary bg-surface-bright shadow-md scale-[1.01]'
+                  : 'border-outline-variant/60 bg-surface-bright hover:border-primary/40'
+              } ${isCompleted ? 'opacity-60' : ''}`}
               style={isSelected
                 ? { boxShadow: '0 4px 16px rgba(21,66,18,0.18)' }
                 : { boxShadow: '4px 4px 10px #dbd9d9, -4px -4px 10px #ffffff' }
               }
             >
-              {item.priority_flag && (
+              {item.priority_flag && !isCompleted && (
                 <div className="absolute inset-x-0 top-0 h-1.5 bg-error animate-pulse rounded-t-2xl" />
               )}
 
-              {/* Token + Name + Badge */}
-              <div className="flex items-center justify-between pt-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-label-sm font-bold text-on-primary bg-primary px-2.5 py-1 rounded-lg">
-                    {item.token}
-                  </span>
-                  <span className="font-display font-bold text-[17px] text-on-surface">{item.patient.name}</span>
+              {/* LEFT: Token + Patient Info */}
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-11 h-11 rounded-xl bg-primary text-on-primary font-mono text-label-sm font-bold flex items-center justify-center shrink-0 shadow-sm">
+                  {item.token}
                 </div>
-                {item.priority_flag
-                  ? <span className="px-2 py-0.5 rounded-full bg-error-container text-error text-[11px] font-bold flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[13px] icon-fill">emergency</span>URGENT
-                    </span>
-                  : <span className="px-2 py-0.5 rounded-full bg-secondary-container text-secondary text-[10px] font-semibold">ROUTINE</span>
-                }
+                <div className="flex flex-col min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-display font-bold text-[16px] text-on-surface truncate">
+                      {item.patient.name}
+                    </h3>
+                    {item.priority_flag && (
+                      <span className="px-2 py-0.5 rounded-full bg-error-container text-error text-[10px] font-bold shrink-0 flex items-center gap-0.5">
+                        <span className="material-symbols-outlined text-[12px] icon-fill">emergency</span>
+                        URGENT
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-body-md text-on-surface-variant text-[13px] truncate">
+                    <strong className="text-on-surface capitalize font-semibold">{item.chief_complaint.replace('_', ' ')}</strong>
+                    {' • '}{item.patient.age}y ({item.patient.language.toUpperCase()})
+                  </p>
+                </div>
               </div>
 
-              {/* Info Row */}
-              <div className="flex items-center justify-between text-label-sm font-body text-on-surface-variant">
-                <span>{item.patient.age}y • {item.patient.language.toUpperCase()} • <strong className="text-on-surface capitalize">{item.chief_complaint.replace('_',' ')}</strong></span>
-                <span className="text-outline">{timeAgo(item.created_at)}</span>
-              </div>
-
-              {/* Action Row */}
-              <div className="flex items-center justify-between pt-2 border-t border-outline-variant/30">
-                <span className={`text-label-sm font-body font-semibold flex items-center gap-1 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`}>
-                  {isActive && <span className="material-symbols-outlined text-[15px] icon-fill">medical_services</span>}
-                  {isActive ? 'In Consultation' : 'Waiting'}
-                </span>
+              {/* RIGHT: REVIEW BUTTON */}
+              <div className="flex items-center gap-2 shrink-0">
                 <button
-                  onClick={e => { e.stopPropagation(); selectPatient(item) }}
-                  className={`px-4 py-1.5 rounded-xl text-label-sm font-body font-bold flex items-center gap-1 transition-all ${
-                    isActive
-                      ? 'bg-primary text-on-primary'
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    selectPatient(item)
+                  }}
+                  className={`px-4 py-2 text-label-sm font-bold rounded-xl flex items-center gap-1.5 transition-all shrink-0 ${
+                    isSelected
+                      ? 'bg-primary text-on-primary shadow-md'
                       : 'bg-surface-container border-2 border-primary text-primary hover:bg-primary hover:text-on-primary'
                   }`}
                   style={{ boxShadow: '3px 3px 6px #dbd9d9, -3px -3px 6px #ffffff' }}
                 >
-                  {isActive ? 'Open' : 'Review'}
-                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                  <span>Review</span>
+                  <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
                 </button>
               </div>
             </div>
@@ -253,6 +291,8 @@ export default function DoctorConsole() {
         </p>
       </div>
     )
+
+    const isCompleted = selected.status === 'completed'
 
     return (
       <div className="flex flex-col h-full min-h-0">
@@ -288,17 +328,37 @@ export default function DoctorConsole() {
                 </p>
               </div>
             </div>
-            {/* Status badge */}
-            <span className="px-4 py-2 rounded-xl bg-primary text-on-primary text-label-sm font-bold flex items-center gap-1.5"
-              style={{ boxShadow: '0 3px 8px rgba(21,66,18,0.3)' }}>
-              <span className="material-symbols-outlined text-[18px] icon-fill">medical_services</span>
-              In Consultation
-            </span>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+              {isCompleted ? (
+                <span className="px-4 py-2 rounded-xl bg-surface-container text-on-surface-variant font-body font-bold text-label-sm flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                  Completed
+                </span>
+              ) : (
+                <>
+                  <span className="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-label-sm font-bold flex items-center gap-1.5"
+                    style={{ boxShadow: '0 3px 8px rgba(21,66,18,0.3)' }}>
+                    <span className="material-symbols-outlined text-[16px] icon-fill">medical_services</span>
+                    In Consult
+                  </span>
+                  <button
+                    onClick={completeConsultation}
+                    className="px-3 py-1.5 rounded-xl bg-surface-bright text-primary border-2 border-primary font-body font-bold text-label-sm hover:bg-primary hover:text-on-primary transition-all flex items-center gap-1"
+                    style={{ boxShadow: '3px 3px 6px #dbd9d9, -3px -3px 6px #ffffff' }}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">done_all</span>
+                    Done
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Scrollable Detail Body */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-5">
+        <div className="flex-1 overflow-y-auto p-4 pb-28 sm:pb-6 flex flex-col gap-5">
 
           {/* AI Clinical Summary */}
           <section className="bg-surface-bright rounded-2xl border border-outline-variant p-5 flex flex-col gap-4"
